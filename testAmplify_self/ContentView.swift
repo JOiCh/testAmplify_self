@@ -1,21 +1,24 @@
-//
-//  ContentView.swift
-//  testAmplify_self
-//
-//  Created by JOi Chao on 2022/11/14.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+
+    @EnvironmentObject var authSessionManager: AuthSessionManager
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+
+        switch authSessionManager.authState {
+        case .login:
+            LoginView()
+                .environmentObject(authSessionManager)
+            
+        case .confirmCode(let username):
+            VerifyCodeView(username: username)
+                .environmentObject(authSessionManager)
+            
+        case .test:
+            IndexView()
+                .environmentObject(authSessionManager)
         }
-        .padding()
     }
 }
 
@@ -24,3 +27,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
